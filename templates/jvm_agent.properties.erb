@@ -1,0 +1,25 @@
+agentContext=<%= @agent_context %>
+agentId=<%= @title %>
+host=<%= @host %>
+port=<%= @port %>
+<%- if @user and @password -%>
+user=<%= @user %>
+password=<%= @password %>
+<%- end -%>
+protocol=<%= @protocol %>
+<%- if @protocol == 'https' -%>
+keystore=<%= @keystore %>
+keystorePassword=<%= @keystore_password %>
+useSslClientAuthentication=<%= @use_ssl_client_auth %>
+<%- end -%>
+executor=<%= @executor %>
+<%- if @executor == 'fixed' -%>
+        threadNr=<%= @thread_nr %>
+<%- end -%>
+bootAmx=<%= @boot_amx %>
+discoveryEnabled=<%= @discovery_enabled %>
+<%- if @dicovery_enabled -%>
+        discoveryAgentUrl=<%= @discovery_agent_url %>
+<%- end -%>
+includeStackTrace=<%= @include_stacktrace %>
+policyLocation=file://<%= @policy_location %>
