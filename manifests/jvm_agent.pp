@@ -16,6 +16,7 @@ define jolokia::jvm_agent (
   $discovery_agent_url  = undef,
   $include_stacktrace   = false,
   $policy_location      = '/jumio/data/jolokia/jumio-policy.xml',
+  $external_service     = '',
 ) {
 
   require jolokia
@@ -27,6 +28,11 @@ define jolokia::jvm_agent (
   validate_bool($discovery_enabled)
   validate_bool($include_stacktrace)
 
+  $manage_external_service = $external_service ? {
+    ''      => undef,
+    default => Service[$external_service]
+  }
+
   file { "jolokia.jvm_agent.${name}":
     ensure  => file,
     path    => "${jolokia::config_dir}/${name}.properties",
@@ -34,6 +40,7 @@ define jolokia::jvm_agent (
     owner   => $jolokia::config_file_owner,
     group   => $jolokia::config_file_group,
     content => template('jolokia/jvm_agent.properties.erb'),
+    notify  => $manage_external_service,
   }
 
 }
