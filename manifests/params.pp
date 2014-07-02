@@ -41,7 +41,7 @@ class jolokia::params {
   $dependency_class = ''
   $source_dir = undef
   $source_dir_purge = false
-  $options = ''
+  $options = {}
   $version = 'present'
   $absent = false
 
