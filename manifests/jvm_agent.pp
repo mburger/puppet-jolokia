@@ -17,6 +17,7 @@ define jolokia::jvm_agent (
   $include_stacktrace   = false,
   $policy_location      = '/jumio/data/jolokia/jumio-policy.xml',
   $external_service     = '',
+  $firewall             = params_lookup( 'firewall' , 'global' ),
 ) {
 
   require jolokia
@@ -43,4 +44,18 @@ define jolokia::jvm_agent (
     notify  => $manage_external_service,
   }
 
+  if $firewall {
+    if $host != 'localhost' {
+      firewall { "jolokia_access_tcp_${port}":
+        enable      => true,
+        source      => '0.0.0.0/0',
+        destination => '0.0.0.0/0',
+        protocol    => 'tcp',
+        port        => $port,
+        action      => 'allow',
+        direction   => 'input',
+        tool        => 'iptables',
+      }
+    }
+  }
 }
