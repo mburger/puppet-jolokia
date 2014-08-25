@@ -25,5 +25,6 @@ class jolokia::config {
     replace => $jolokia::manage_file_replace,
     audit   => $jolokia::manage_audit,
     noop    => $jolokia::noops,
+    mode    => '0755',
   }
 }
