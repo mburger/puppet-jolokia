@@ -18,6 +18,7 @@ define jolokia::jvm_agent (
   $policy_location      = '/jumio/data/jolokia/jumio-policy.xml',
   $external_service     = '',
   $firewall             = params_lookup( 'firewall' , 'global' ),
+  $collectd             = false
 ) {
 
   require jolokia
@@ -56,6 +57,14 @@ define jolokia::jvm_agent (
         direction   => 'input',
         tool        => 'iptables',
       }
+    }
+  }
+
+  if $collectd {
+    collectd::plugin::jolokia::connection {
+      "jolokia.collectd.${name}":
+        url      => "http://localhost:${port}${agent_context}/",
+        instance => $name
     }
   }
 }
