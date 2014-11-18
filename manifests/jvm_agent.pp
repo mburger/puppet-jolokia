@@ -18,7 +18,9 @@ define jolokia::jvm_agent (
   $policy_location      = '/jumio/data/jolokia/jumio-policy.xml',
   $external_service     = '',
   $firewall             = params_lookup( 'firewall' , 'global' ),
-  $collectd             = false
+  $collectd             = false,
+  $collectd_type        = 'generic',
+  $collectd_mbeans      = ['java.lang:type=Memory', 'java.lang:type=GarbageCollector,*', 'java.lang:type=Threading']
 ) {
 
   require jolokia
@@ -60,11 +62,18 @@ define jolokia::jvm_agent (
     }
   }
 
+  $jolokia_mbeans = $collectd_type ? {
+    'tomcat'   => ['java.lang:type=Memory', 'java.lang:type=GarbageCollector,*', 'java.lang:type=Threading', '*:type=GlobalRequestProcessor,*', '*:type=Manager,*'],
+    'activemq' => ['java.lang:type=Memory', 'java.lang:type=GarbageCollector,*', 'java.lang:type=Threading', 'org.apache.activemq:type=Broker,*'],
+    default    => $collectd_mbeans
+  }
+
   if $collectd {
     collectd::plugin::jolokia::connection {
       "jolokia.collectd.${name}":
         url      => "http://localhost:${port}${agent_context}/",
-        instance => $name
+        instance => $name,
+        mbeans   => $jolokia_mbeans
     }
   }
 }
