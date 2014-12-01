@@ -44,6 +44,7 @@ class jolokia::params {
   $options = {}
   $version = 'present'
   $absent = false
+  $jvm_agents = {}
 
   ### General module variables that can have a site or per module default
   $puppi = false

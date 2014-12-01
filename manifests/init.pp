@@ -112,6 +112,7 @@ class jolokia (
   $config_file_mode           = params_lookup( 'config_file_mode' ),
   $config_file_owner          = params_lookup( 'config_file_owner' ),
   $config_file_group          = params_lookup( 'config_file_group' ),
+  $jvm_agents                 = params_lookup( 'jvm_agents' )
   ) inherits jolokia::params {
 
   $bool_source_dir_purge=any2bool($source_dir_purge)
@@ -165,6 +166,11 @@ class jolokia (
     }
   }
 
+  ### Create instances for integration with Hiera
+  if $jvm_agents != {} {
+    validate_hash($jvm_agents)
+    create_resources(jolokia::jvm_agent, $jvm_agents)
+  }
 
   ### Provide puppi data, if enabled ( puppi => true )
   if $jolokia::bool_puppi == true {
