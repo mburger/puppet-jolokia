@@ -23,7 +23,7 @@ define jolokia::jvm_agent (
   $collectd_mbeans      = ['java.lang:type=Memory', 'java.lang:type=GarbageCollector,*', 'java.lang:type=Threading']
 ) {
 
-  require jolokia
+  include jolokia
 
   validate_re($protocol, '^http(s)?$', 'the protocol has to bo one of http or https')
   validate_re($executor, '^(single|cached|fixed)$', 'the executer has to be one of single, cached or fixed')
